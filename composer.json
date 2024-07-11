@@ -1,0 +1,32 @@
+{
+    "name": "ycookies/dcatplus-demo",
+    "alias": "Dcatplus 示例演示",
+    "description": "Dcatplus 功能,页面组件 示例演示",
+    "type": "library",
+    "keywords": ["dcat-admin", "extension"],
+    "homepage": "https://github.com/ycookies/dcatplus-demo",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "杨光",
+            "email": "3664839@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "dcat-plus/laravel-admin": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dcat\\Admin\\DcatplusDemo\\": "src/"
+        }
+    },
+    "extra": {
+        "dcat-admin": "Dcat\\Admin\\DcatplusDemo\\DcatplusDemoServiceProvider",
+        "laravel": {
+            "providers": [
+                "Dcat\\Admin\\DcatplusDemo\\DcatplusDemoServiceProvider"
+            ]
+        }
+    }
+}
