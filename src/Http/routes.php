@@ -134,6 +134,9 @@ Route::prefix('dcatplus-demo')
 
         Route::get('components/modal', 'Components\ModalController@index');
         Route::get('components/modal/preview', 'Components\ModalController@preview');
+        Route::get('components/navbar', 'Components\NavbarController@index');
+        Route::get('components/cover-card', 'Components\CoverCardController@index');
+        Route::get('components/cover-card/preview', 'Components\CoverCardController@preview');
 
         // movies
         Route::get('movies/coming-soon', 'Movies\ComingSoonController@index');
