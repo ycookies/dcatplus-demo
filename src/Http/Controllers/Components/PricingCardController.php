@@ -72,8 +72,11 @@ HTML;
 
 
         $header = '定价卡';
-        $content->breadcrumb('Components');
-        $content->breadcrumb($header);
+        $content->breadcrumb(
+            ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+            ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+            ['text' => 'list-group']
+        );
 
         return $content->header($header);
     }

@@ -46,8 +46,12 @@ class BtnGroupController extends Controller
 
         $content->row(Card::make('按钮组(btn-group)', $group2->render()));
         $header = 'btn-group';
-        $content->breadcrumb('Components');
-        $content->breadcrumb($header);
+        // 添加面包屑导航
+        $content->breadcrumb(
+            ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+            ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+            ['text' => 'btn-group']
+        );
 
         return $content->header($header);
     }

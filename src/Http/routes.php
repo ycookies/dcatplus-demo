@@ -49,6 +49,9 @@ Route::prefix('dcatplus-demo')
         Route::get('forms', 'Full\FormController@index');
         Route::get('forms/preview', 'Full\FormController@preview');
 
+        Route::get('forms/append', 'Full\FormAppendController@index');
+        Route::get('forms/append/preview', 'Full\FormAppendController@preview');
+
         // 分步表单
         Route::get('form/step/preview', 'Full\StepFormController@preview');
         Route::get('form/step', 'Full\StepFormController@index');
@@ -131,6 +134,7 @@ Route::prefix('dcatplus-demo')
         Route::get('components/pricing-card', 'Components\PricingCardController@index');
         Route::get('components/pricing-card/preview', 'Components\PricingCardController@preview');
 
+        Route::get('components/pricing-card/preview', 'Components\PricingCardController@preview');
 
         Route::get('components/modal', 'Components\ModalController@index');
         Route::get('components/modal/preview', 'Components\ModalController@preview');

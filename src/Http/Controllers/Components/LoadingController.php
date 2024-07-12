@@ -33,6 +33,12 @@ class LoadingController extends Controller
 
     public function index(Content $content)
     {
+        // 添加面包屑导航
+        $content->breadcrumb(
+            ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+            ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+            ['text' => 'Loading']
+        );
         $content->row($this->buildPreviewButton().$this->newline());
         $content->row(function (Row $row) {
 

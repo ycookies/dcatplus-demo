@@ -73,7 +73,11 @@ EOF
         $content->row(Box::make('代码', new Code(__FILE__, 12, 1000))->style('default'));
 
         $header = 'Layer弹出层';
-
+        $content->breadcrumb(
+            ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+            ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+            ['text' => 'Layer']
+        );
         return $content->header($header);
     }
 }

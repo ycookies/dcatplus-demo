@@ -54,8 +54,11 @@ HTML;
 
 
         $header = 'media_list';
-        $content->breadcrumb('Components');
-        $content->breadcrumb($header);
+        $content->breadcrumb(
+            ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+            ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+            ['text' => 'media list']
+        );
 
         return $content->header($header);
     }

@@ -90,7 +90,7 @@ class FormController extends Controller
         $form->ip('form1.ip', 'ip');
 
         $form->color('form1.color', 'color');
-        $form->distpicker(['province_id', 'city_id', 'district_id'], '经营场所在地')->required();
+        //$form->distpicker(['province_id', 'city_id', 'district_id'], '经营场所在地')->required();
         /*$form->tab('Profile', function (Form $form) {
 
             $form->image('avatar');
@@ -98,10 +98,6 @@ class FormController extends Controller
             $form->mobile('phone');
 
         });*/
-        $form->image('touxiang', '头像')
-            ->help('<a href="https://gtimg.wechatpay.cn/resource/xres/img/202308/1344340ea9fde9b9b4882c817d54282e_304x192.png" target="_blank"><b>【查看示例】</b></a> 1.请上传彩色照片 or 彩色扫描件 or 加盖公章鲜章的复印件，要求正面拍摄，露出证件四角且清晰、完整，所有字符清晰可识别，不得反光或遮挡。不得翻拍、截图、镜像、PS。
-2.图片只支持JPG、BMP、PNG格式，文件大小不能超过2M。')
-            ->exampleImg('https://gtimg.wechatpay.cn/resource/xres/img/202308/d5f2c28fb232b240cfb190dfc4469227_1080x771.png');
 
 
         $form->divider();
@@ -132,8 +128,6 @@ class FormController extends Controller
         $form->timeRange('form1.time-start', 'form1.time-end', 'time range');
         $form->datetimeRange('form1.datetime-start', 'form1.datetime-end', 'datetime range');
         $form->tags('keywords');
-        $form->html('自定义表单');
-        $form->diyForm('field_name','自定义表单')->themeColor('red');
         /*$form->iconimg('rights_icon','图标')
             ->nametype('datetime')
             ->remove(true)

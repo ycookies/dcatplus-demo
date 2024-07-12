@@ -17,6 +17,11 @@ class NavbarController extends Controller
     public function index(Content $content)
     {
         return $content->header('Navbar')
+            ->breadcrumb(
+                ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+                ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+                ['text' => 'Navbar']
+            )
             ->body(function (Row $row) {
                 $values = ['a' => 'text1' , 'b' => 'text2', 'c' => 'text3', 'd' => 'text4', ['github', 'https://www.github.com']];
 

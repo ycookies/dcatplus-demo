@@ -9,12 +9,10 @@ use Dcat\Admin\Widgets\Code;
 use Dcat\Admin\Widgets\Tooltip;
 use Illuminate\Routing\Controller;
 
-class TooltipController extends Controller
-{
-    public function index(Content $content)
-    {
+class TooltipController extends Controller {
+    public function index(Content $content) {
         $header = 'Tooltip';
-        $text = 'Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. ';
+        $text   = 'Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. ';
 
         Tooltip::make('.tt-left')
             ->left()
@@ -49,6 +47,12 @@ HTML;
 
                 $row->column(12, $html);
             })
+            // 添加面包屑导航
+            ->breadcrumb(
+                ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+                ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+                ['text' => 'Tooltip']
+            )
             ->body(Box::make('代码', Code::make(__FILE__, 14, 65)));
     }
 }

@@ -18,6 +18,11 @@ class DropdownMenuController extends Controller
     public function index(Content $content)
     {
         return $content->header('Dropdown Menu')
+            ->breadcrumb(
+                ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+                ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+                ['text' => 'Dropdown Menu']
+            )
             ->body(function (Row $row) {
                 $row->column(3, $this->example1());
                 $row->column(3, $this->example2());

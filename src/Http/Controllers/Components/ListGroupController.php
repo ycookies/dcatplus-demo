@@ -57,8 +57,11 @@ class ListGroupController extends Controller
         $content->row($this->buildPreviewButton().$this->newline());
         $content->row(Card::make('列表组(list-group)', $list_group->render()));
         $header = 'list-group';
-        $content->breadcrumb('Components');
-        $content->breadcrumb($header);
+        $content->breadcrumb(
+            ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+            ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+            ['text' => 'list-group']
+        );
 
         return $content->header($header);
     }

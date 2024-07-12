@@ -21,6 +21,11 @@ class FullWidgetController extends Controller {
 
         return $content->header('百种组件')
             ->description('专注为后台开发提速')
+            // 添加面包屑导航
+            ->breadcrumb(
+                ['text' => 'Dcat-Plus 示例大全', 'url' => '/admin/dcatplus-demo'],
+                ['text' => '页面组件', 'url' => '/admin/dcatplus-demo/full-widget']
+            )
             ->body($alert . $this->pageMain());
     }
 
@@ -113,7 +118,7 @@ class FullWidgetController extends Controller {
 
         $linkbox = new Linkbox();
         $linkbox->groupTitle('新增组件 <span class="text-danger f14">('.count($link_group).' 种)</span>');
-        $linkbox->target('_blank');
+        //$linkbox->target('_blank');
 
         foreach ($link_group as $key => $itemk) {
             $linkbox->add($itemk['icon'], $itemk['title'], $itemk['sub_title'], $itemk['link'], $itemk['bg_value'])->hot($itemk['hot']);
@@ -199,7 +204,7 @@ class FullWidgetController extends Controller {
         ];
         $linkbox2 = new Linkbox();
         $linkbox2->groupTitle('Dcat原有组件 <span class="text-danger f14">('.count($link_group2).' 种)</span>');
-        $linkbox2->target('_blank');
+        //$linkbox2->target('_blank');
 
         foreach ($link_group2 as $key => $itemk) {
             $linkbox2->add($itemk['icon'], $itemk['title'], $itemk['sub_title'], $itemk['link'], $itemk['bg_value'])->hot($itemk['hot']);

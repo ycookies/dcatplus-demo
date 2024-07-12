@@ -22,6 +22,11 @@ class MetricCardController extends Controller
     {
         return $content
             ->header('数据统计卡片')
+            ->breadcrumb(
+                ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+                ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+                ['text' => '数据统计卡片']
+            )
             ->body($this->buildPreviewButton().$this->newline())
             ->body(function (Row $row) {
                 $row->column(4, new TotalUsers());

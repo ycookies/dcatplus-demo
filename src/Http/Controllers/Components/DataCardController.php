@@ -32,6 +32,12 @@ class DataCardController extends Controller
         }
 
         return $content->header('Data Card')
+            // 添加面包屑导航
+            ->breadcrumb(
+                ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+                ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+                ['text' => 'DataCard']
+            )
             ->body($this->buildPreviewButton().$this->newline())
             ->body($this->default())
             ->body($this->chartJs())
@@ -43,7 +49,7 @@ class DataCardController extends Controller
      *
      * @return $this
      */
-    protected function default()
+    protected function defaults()
     {
         $cards[] = DataCard\Card::make()
             ->title('日活用户增长')
@@ -281,7 +287,7 @@ class DataCardController extends Controller
             ->toJsonResponse();
     }
 
-    protected function box(string $title, array $cards, string $class = '')
+    protected function box(string $title, array $cards, $class = '')
     {
         return Box::make($title, function () use ($cards) {
             $row = new Row();

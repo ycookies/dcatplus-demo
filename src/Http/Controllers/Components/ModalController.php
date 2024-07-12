@@ -22,6 +22,11 @@ class ModalController extends Controller
     {
         return $content
             ->header('Modal')
+            ->breadcrumb(
+                ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+                ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+                ['text' => '模态窗']
+            )
             ->description('模态窗')
             ->body($this->render());
     }

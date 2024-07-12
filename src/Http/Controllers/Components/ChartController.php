@@ -33,7 +33,7 @@ class ChartController extends Controller
      * @param $content
      * @return Box
      */
-    protected function box(string $title, $content, string $class = '')
+    protected function box(string $title, $content, $class = '')
     {
         return Box::make($title, $content)->style('default')->setHtmlAttribute('class', $class);
     }

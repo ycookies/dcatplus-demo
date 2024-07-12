@@ -4,23 +4,24 @@ namespace Dcat\Admin\DcatplusDemo\Http\Controllers\Components;
 
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Layout\Row;
-use Dcat\Admin\Widgets\Box;
 use Dcat\Admin\Widgets\Code;
 use Dcat\Admin\Widgets\Tab;
 use Faker\Factory;
 use Illuminate\Routing\Controller;
 
-class TabController extends Controller
-{
-    public function index(Content $content)
-    {
+class TabController extends Controller {
+    public function index(Content $content) {
         $header = 'Tab & Button';
 
         $faker = Factory::create();
 
         return $content->header($header)
-            ->breadcrumb('Components')
-            ->breadcrumb($header)
+            // 添加面包屑导航
+            ->breadcrumb(
+                ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+                ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+                ['text' => 'Tab & Button']
+            )
             ->body(function (Row $row) use ($faker) {
                 $tab = new Tab();
 
@@ -47,8 +48,7 @@ class TabController extends Controller
             });
     }
 
-    protected function buttons()
-    {
+    protected function buttons() {
         return "
 <p> 
     <div class='pull-left'>

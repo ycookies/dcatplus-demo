@@ -18,8 +18,13 @@ class MarkdownController extends Controller
 
             return new Markdown($this->content());
         });
-
-        return $content->header('Markdown')->body($tab->withCard());
+        return $content->header('Markdown')
+            ->breadcrumb(
+                ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+                ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+                ['text' => 'markdown']
+            )
+            ->body($tab->withCard());
     }
 
     protected function content()

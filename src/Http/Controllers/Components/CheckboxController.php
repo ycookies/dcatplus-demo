@@ -100,7 +100,12 @@ class CheckboxController extends Controller
 
         return $content
             ->header($header)
-            ->breadcrumb($header)
+            // 添加面包屑导航
+            ->breadcrumb(
+                ['text' => 'Dcat-Plus 示例大全', 'url' => '/dcatplus-demo'],
+                ['text' => '页面组件', 'url' => '/dcatplus-demo/full-widget'],
+                ['text' => 'Checkbox & Radio']
+            )
             ->row($this->buildPreviewButton())
             ->row($this->newline())
             ->row($this->block1())

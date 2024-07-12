@@ -86,6 +86,11 @@ class DcatplusDemoServiceProvider extends ServiceProvider {
             'uri'    => '',
         ],[
             'parent' => '数据表单',
+            'title'  => '新增字段 <span class="right badge badge-danger">New</span>',
+            'icon'   => 'fa fa-plus-circle',
+            'uri'    => 'dcatplus-demo/forms/append',
+        ],[
+            'parent' => '数据表单',
             'title'  => '表单字段',
             'icon'   => 'feather icon-edit-1',
             'uri'    => 'dcatplus-demo/forms',
@@ -96,7 +101,7 @@ class DcatplusDemoServiceProvider extends ServiceProvider {
             'uri'    => 'dcatplus-demo/form/modal',
         ],[
             'parent' => '数据表单',
-            'title'  => '分步表单',
+            'title'  => '分步表单 <span class="right badge badge-danger">已集成</span>',
             'icon'   => 'feather icon-menu',
             'uri'    => 'dcatplus-demo/form/step',
         ],[
