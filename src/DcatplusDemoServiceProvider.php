@@ -44,6 +44,11 @@ class DcatplusDemoServiceProvider extends ServiceProvider {
             'uri'    => 'dcatplus-demo/reports',
         ],[
             'parent' => '数据表格',
+            'title'  => '合并单元格',
+            'icon'   => 'feather icon-menu',
+            'uri'    => 'dcatplus-demo/merge-cell',
+        ],[
+            'parent' => '数据表格',
             'title'  => '固定列',
             'icon'   => 'feather icon-menu',
             'uri'    => 'dcatplus-demo/fixed-columns',

@@ -29,11 +29,33 @@ class Report extends Repository
 
         $data = [];
 
+        $room_name = [
+            '大床房',
+            '大床房',
+            '大床房',
+            '1床房',
+            '1床房',
+            '2床房',
+            '2床房',
+            '3床房',
+            '3床房',
+            '3床房',
+            '4床房',
+            '4床房',
+            '4床房',
+            '5床房',
+            '5床房',
+            '5床房',
+            '6床房',
+            '6床房',
+        ];
+
         for ($i = 0; $i < 20; $i++) {
             $data[] = [
                 'id' => $i + 1,
                 'name' => $faker->name,
                 'content' => $faker->text,
+                'room_name' => !empty($room_name[$i]) ? $room_name[$i]:'二人房',
                 'cost' => $faker->randomFloat(),
                 'avgMonthCost' => $faker->randomFloat(),
                 'avgQuarterCost' => $faker->randomFloat(),

@@ -19,6 +19,9 @@ Route::prefix('dcatplus-demo')
         // 报表示例
         Route::get('reports', 'Full\ReportController@index');
         Route::get('reports/preview', 'Full\ReportController@preview');
+        // 合并单元格
+        Route::get('merge-cell', 'Full\MergeCellController@index');
+        Route::get('merge-cell/preview', 'Full\MergeCellController@preview');
 
         // 固定列功能示例
         Route::get('fixed-columns', 'Full\FixedController@index');
@@ -111,6 +114,9 @@ Route::prefix('dcatplus-demo')
         Route::get('components/loading/preview', 'Components\LoadingController@preview');
         Route::get('components/metric-cards', 'Components\MetricCardController@index');
         Route::get('components/metric-cards/preview', 'Components\MetricCardController@preview');
+        Route::get('components/cards', 'Components\CardController@index');
+        Route::get('components/cards/preview', 'Components\CardController@preview');
+
         Route::get('components/carousel', 'Components\CarouselController@index');
         Route::get('components/carousel/preview', 'Components\CarouselController@preview');
         Route::get('components/collapse', 'Components\CollapseController@index');

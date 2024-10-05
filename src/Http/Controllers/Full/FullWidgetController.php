@@ -100,7 +100,7 @@ class FullWidgetController extends Controller {
                 'hot'       => false,
             ], [
                 'icon'      => 'fa fa-id-card-o',
-                'title'     => 'card-widget',
+                'title'     => 'Card-widget',
                 'sub_title' => '用户卡片挂件',
                 'link'      => '/admin/dcatplus-demo/components/card-widget',
                 'bg_value'  => 'bg-info',
@@ -141,6 +141,13 @@ class FullWidgetController extends Controller {
                 'title'     => 'metric-cards',
                 'sub_title' => '数据统计卡片',
                 'link'      => '/admin/dcatplus-demo/components/metric-cards',
+                'bg_value'  => 'bg-success',
+                'hot'       => false,
+            ],[
+                'icon'      => 'fa fa-credit-card',
+                'title'     => 'Card',
+                'sub_title' => '普通卡片',
+                'link'      => '/admin/dcatplus-demo/components/cards',
                 'bg_value'  => 'bg-success',
                 'hot'       => false,
             ], [
