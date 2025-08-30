@@ -1,9 +1,9 @@
-🚀 一个基于 [Dcatplus Admin](https://github.com/jqhph/dcat-admin) 的增强功能示例项目集合与开发实践参考。
+🚀 一个基于 [Dcatplus Admin](https://gitee.com/dcat_admin/dcat-plus-admin) 的增强功能示例项目集合与开发实践参考。
 
 
 ## 📖 项目简介
 
-本项目是 `Dcat Admin` 的一个功能演示和代码示例仓库，旨在为开发者提供：
+本项目是 `DcatPlus Admin` 的一个功能演示和代码示例仓库，旨在为开发者提供：
 -   **功能展示**：集中展示各种基于 Dcat Admin 开发的增强组件和特色功能。
 -   **开发参考**：提供高质量、可运行的示例代码，帮助您快速上手和实现复杂功能。
 -   **最佳实践**：分享在 Dcat Admin 项目中的一些架构设计和代码组织方式。
