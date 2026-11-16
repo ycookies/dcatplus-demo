@@ -91,17 +91,22 @@ class ModalFormController extends Controller
     }
 
     /**
-     * 2. 交互演示：弹窗内按钮状态跨开关延续（元素身份保持的硬证据）.
+     * 2. keepAlive 复用式：关闭归位、状态延续（元素身份保持）.
+     *
+     * 默认销毁式（其余示例）：关闭即销毁、页面零 DOM 残留、重复打开
+     * 每次都是初始状态。需要跨开关保留状态或依赖页面加载时脚本绑定的
+     * 内容（工具表单、图表等）才开启本项.
      */
     protected function syncInteractive()
     {
         return Modal::make()
-            ->title('同步内容 · 交互延续')
-            ->body("<p>反复【关闭再打开】弹窗，计数不会归零——内容是同一个 DOM 节点，"
-                ."只是搬入/搬出弹层：</p>"
+            ->keepAlive()
+            ->title('同步内容 · keepAlive 复用式')
+            ->body("<p>本弹窗开启了 <code>keepAlive()</code>：反复【关闭再打开】计数不归零"
+                ."（同一 DOM 节点复用，关闭只是归位隐藏）：</p>"
                 ."<button class='btn btn-primary btn-sm' onclick=\"var n=(this.dataset.n=(+this.dataset.n||0)+1);"
                 ."this.innerText='点了 '+n+' 次'\">点我计数</button>")
-            ->button("<span class='btn btn-outline-primary'>交互延续</span>")
+            ->button("<span class='btn btn-outline-primary'>keepAlive 复用</span>")
             ->render();
     }
 
@@ -116,7 +121,7 @@ class ModalFormController extends Controller
         );
 
         return Modal::make()
-            ->lg()
+            //->lg()
             ->title('同步内容 · 组件 + footer')
             ->body($table)
             ->footer("<button class='btn btn-white' onclick=\"layer.closeAll()\">知道了</button>")
@@ -147,6 +152,7 @@ class ModalFormController extends Controller
     protected function syncWidgetForm()
     {
         return Modal::make()
+            ->keepAlive()
             ->title('同步内容 · 工具表单（Widgets\Form + handle）')
             ->body(SyncWidgetForm::make())
             ->button("<span class='btn btn-outline-primary'>同步表单</span>")
