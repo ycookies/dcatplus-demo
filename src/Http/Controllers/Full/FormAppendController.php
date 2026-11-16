@@ -8,9 +8,14 @@ use Dcat\Admin\Form\NestedForm;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Layout\Row;
 use Dcat\Admin\Models\Administrator;
+use Dcat\Admin\Models\Menu;
 use Dcat\Admin\Widgets\Box;
-use Dcat\Admin\Widgets\Form;
+use Dcat\Admin\Widgets;
+use Dcat\Admin\Widgets\Form as widgetsForm;
+use Dcat\Admin\Form;
 use Dcat\Admin\Widgets\Tab;
+use Dcat\Admin\Widgets\Modal;
+use Dcat\Admin\Widgets\DialogForm;
 use Faker\Factory;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
@@ -19,15 +24,28 @@ use Dcat\Admin\Models\Setting as SettingModel;
 use Dcat\Admin\Widgets\Dropdown;
 use Dcat\Admin\Widgets\Calendar;
 use Dcat\Admin\Widgets\Card;
+use Dcat\Admin\Widgets\MiniProgramBox;
+use Dcat\Admin\Admin;
+use Dcat\Admin\Layout\Column;
+use Dcat\Admin\Tree;
+use App\Models\Category;
+
 class FormAppendController extends Controller
 {
     use PreviewCode;
 
     public function index(Content $content)
     {
+
         if (request()->getMethod() == 'POST') {
             $content->row(Box::make('POST', $this->dump(request()->all()))->style('default'));
         }
+
+
+
+
+        //$content->row($box1->render());
+        //return $box1->render();
 
         $content->row('<div style="margin:5px 0 15px;">'.$this->buildPreviewButton().'</div>');
 
@@ -43,13 +61,124 @@ class FormAppendController extends Controller
             //     $tab->addLink('Form-1', request()->fullUrlWithQuery(['_t' => 1]));
             //     $tab->add('Form-2', $this->form2(), true);
             // }
+            //$tab->add('Form-0', $this->form0(),false,'Form-0');
             $tab->add('Form-1', $this->form1(),false,'Form-1');
-
+            $tab->add('Form-2', $this->form2(),false,'Form-2');
             $row->column(12, $tab->withCard());
         });
 
         return $content
             ->header('Form');
+    }
+
+    public function index2(Content $content)
+    {
+
+        if (request()->getMethod() == 'POST') {
+            $content->row(Box::make('POST', $this->dump(request()->all()))->style('default'));
+        }
+
+
+        $content->row((function(Row $row) {
+            $box1 = Widgets\MiniProgramBox::make('','');
+            //$card = Widgets\Card::make('','123')->withHeaderBorder();
+            $row->column(5,$box1->render());
+            $row->column(7,function(Column $column) {
+                /*$card = Widgets\Card::make('头像栏设置','123')->withHeaderBorder();
+                $column->row($card->render());
+
+                $card = Widgets\Card::make('收藏足迹栏','123')->withHeaderBorder();
+                $column->row($card->render());
+
+                $card = Widgets\Card::make('订单栏设置','123')->withHeaderBorder();
+                $column->row($card->render());
+
+                $card = Widgets\Card::make('账户栏设置','123')->withHeaderBorder();
+                $column->row($card->render());*/
+                $draggable_list = [
+                    [
+                        'id' => '1',
+                        'icon' => 'fa fa-bell',
+                        'title' => '常用地址',
+                        'path' => '',
+                    ],
+                    [
+                        'id' => '2',
+                        'icon' => 'fa fa-book',
+                        'title' => '我的客服',
+                        'path' => '',
+                    ],
+                    [
+                        'id' => '3',
+                        'icon' => 'fa fa-book',
+                        'title' => '领券中心',
+                        'path' => '',
+                    ],
+                    [
+                        'id' => '4',
+                        'icon' => 'fa fa-book',
+                        'title' => '积分商城',
+                        'path' => '',
+                    ]
+                ];
+                $forms = Widgets\Form::make(['menu_title'=> '1111233','draggable_list'=> $draggable_list]);
+                $forms->width(7,3);
+                $forms->action(admin_url('/userCenter/setting/save'));
+                $forms->switch('is_menu_status','菜单栏显示状态');
+                $forms->text('menu_title','菜单栏标题')->prepend('')->default('列表')->placeholder('');
+                $forms->radio('menu_style','菜单栏样式')->options([1=> '九宫格形式',2=>'列表形式'])->default(1);
+
+                //$forms->draggableList('draggable_list','拖动列表');
+                //$forms->listbox('listbox','listbox')->options([1 => 'foo', 2 => 'bar', 'val' => 'Option name']);
+                $tree = new Tree(new Category);
+                //$tree->disableToolbar();
+                $tree->setResource(admin_url('/demo-categories'));
+                $tree->disableRefreshButton();
+                //$tree->disableQuickCreateButton();
+                $tree->disableSaveButton();
+                $tree->disableCollapseButton();
+                $tree->disableExpandButton();
+                $tree->disableCreateButton();
+                $tree->draggableAutoSave();
+                //$tree->expand(false);
+                $forms->html($tree)->label('菜单栏');
+                $forms->confirm('已经设置好了吗？','');
+                $card = Widgets\Card::make('菜单栏设置',$forms->render())->withHeaderBorder();
+                $column->row($card->render());
+            });
+        }));
+
+        //$content->row($box1->render());
+        //return $box1->render();
+
+        /*$content->row('<div style="margin:5px 0 15px;">'.$this->buildPreviewButton().'</div>');
+
+        $content->row(function (Row $row) {
+            $type = request('_t', 1);
+
+            $tab = new Tab();
+
+            // if ($type == 1) {
+            //     $tab->add('Form-1', $this->form1());
+            //     $tab->addLink('Form-2', request()->fullUrlWithQuery(['_t' => 2]));
+            // } else {
+            //     $tab->addLink('Form-1', request()->fullUrlWithQuery(['_t' => 1]));
+            //     $tab->add('Form-2', $this->form2(), true);
+            // }
+            $tab->add('Form-0', $this->form0(),false,'Form-0');
+            $tab->add('Form-1', $this->form1(),false,'Form-1');
+            $tab->add('Form-2', $this->form2(),false,'Form-2');
+            $row->column(12, $tab->withCard());
+        });*/
+
+        return $content
+            ->header('Form');
+    }
+
+    protected function form0(){
+        
+        $box1 = MiniProgramBox::make('','');
+        return $box1->render();
     }
 
     protected function form1()
@@ -106,13 +235,30 @@ class FormAppendController extends Controller
         ];
 
 
-        $calendar = \Dcat\Admin\Widgets\Calendar::make();
-        $calendar->eventItem($events_list);
+        //$calendar = \Dcat\Admin\Widgets\Calendar::make();
+        //$calendar->eventItem($events_list);
 
-        $Card = Card::make($calendar->render());
+        //$Card = Card::make($calendar->render());
         $form = Form::make(new SettingModel());
-        $form->html($Card->render())->width(8);
+        //$form->html($Card->render())->width(8);
+        $new = '新建表单';
+        Form::dialog($new)
+            ->click(".btnsk")
+            ->success('Dcat.reload()')
+            ->dimensions('700px', '400px');
+        $url = '#';
+        $btnss =  "<button data-url='$url' class='btn btn-primary btnsk'><i class='feather icon-plus'></i><span class='d-none d-sm-inline'>&nbsp; $new</span></button>";
 
+
+        $form->html($btnss);
+        // $form->vDateRange('vDateRange','vDateRange');
+
+        //$form->elDatePicker('test10','el-date-picker10')->value(["2024-12-19 11:55:24","2024-12-21 11:55:24"]);
+        $form->selectTable('tables','表格')
+            ->title('弹窗标题')
+            ->dialogWidth('50%')
+            ->from(UserTable::make(['id' => 123]))
+            ->model(Administrator::class, 'id', 'name');
         /*$alendar1 = Calendar::make();
         $alendar1->initialView('listWeek');
         $Card1 = Card::make($alendar1->render());
@@ -121,6 +267,8 @@ class FormAppendController extends Controller
         $form->action(request()->fullUrl());
         $startDate = '2021-09-08';$endDate = '2021-12-08';
 
+
+        $form->currency('currency')->symbol('Y')->append('元');
         $form->iconimg('rights_icon','图标')
             ->nametype('datetime')
             ->remove(true)
@@ -177,6 +325,49 @@ class FormAppendController extends Controller
         return "<div style='padding:10px 8px'>{$form->render()}</div>";
     }
 
+    protected function form2(){
+        $form = Form::make(new SettingModel());
+
+        $form->row(function (Form\Row $form) {
+
+            $wform =    widgetsForm::make();
+            $wform->text('testss')->prepend('https://')->append('.com');
+            $wform->select('selee')->prepend('https://')->options([
+                'baidu' => '百度',
+                'alipay' => '支付宝',
+            ])->append('.net');
+
+            $modal = Modal::make();
+            $modal->title('添加');
+            $modal->body($wform->render());
+            //$modal->centered();
+            $modal->scrollable(true);
+            $modal->enlargedTransform();
+            $modal->button("<i class='feather icon-plus-circle'></i>");
+
+            $form->width(3)->currency('currency')->symbol('￥')->append('元');
+            $form->width(3)->text('book','book')
+                ->append($modal->render())
+                ->prepend('https://');
+            $form->width(4)->select('select','选择')->append($modal->render())
+                ->options(Menu::all()->pluck('title','id'))
+                ->placeholder('-省-')
+                ->loads(['field1'], [admin_url('get-select-val')]);
+            $form->width(4)->select('field1')
+                ->placeholder('—— 市 ——')
+                ->loads(['field2'], [admin_url('get-select-val')])->prepend('https://')->append($modal->render());
+            $form->width(2)->select('field2')->placeholder('—— 区 ——');
+        });
+        /*$form->row(function (Form\Row $form) {
+            $form->text('book1','book1')->append('.com')->prepend('https://');
+            $form->multiDate('multiDates','多个日期');
+            $form->image('img','图片');
+            $form->multipleImage('multi_img','多图片');
+        });*/
+
+        $form->action(request()->fullUrl());
+        return "<div style='padding:10px 8px'>{$form->render()}</div>";
+    }
 
     /**
      * 生成随机数据

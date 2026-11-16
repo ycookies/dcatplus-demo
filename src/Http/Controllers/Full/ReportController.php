@@ -37,7 +37,7 @@ class ReportController extends Controller
 
             $grid->tableCollapse(false);
 
-            $grid->column('content')->limit(50);
+            $grid->column('content')->limit(10);
             $grid->column('cost')->sortable();
             $grid->column('avgMonthCost');
             $grid->column('avgQuarterCost')->setHeaderAttributes(['style' => 'color:#5b69bc']);
@@ -50,7 +50,6 @@ class ReportController extends Controller
             $grid->column('date')->sortable();
 
             // 开启responsive插件
-            $grid;
             $grid->disableActions();
             $grid->disableBatchDelete();
             $grid->disableCreateButton();

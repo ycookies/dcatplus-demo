@@ -110,6 +110,10 @@ Route::prefix('dcatplus-demo')
         Route::get('components/loading', 'Components\LoadingController@index');
         Route::get('components/loading/preview', 'Components\LoadingController@preview');
         Route::get('components/metric-cards', 'Components\MetricCardController@index');
+
+        // ApexCharts v5.16.0 完整示例（line/area/bar/pie/donut/radialbar/radar/polar/heatmap/scatter/bubble/candlestick）
+        Route::get('components/charts', 'Components\ChartsController@index');
+
         Route::get('components/metric-cards/preview', 'Components\MetricCardController@preview');
         Route::get('components/carousel', 'Components\CarouselController@index');
         Route::get('components/carousel/preview', 'Components\CarouselController@preview');

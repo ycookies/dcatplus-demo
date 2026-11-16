@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Widgets\Callout;
+use Dcat\Admin\Widgets\Form as WidgetForm;
 
 class BorderTableController extends Controller
 {
@@ -64,6 +65,10 @@ class BorderTableController extends Controller
                         .$table->render()
                         .'<button class="btn btn-primary btn-sm" onclick="var n=(this.dataset.n=(+this.dataset.n||0)+1);this.innerText=\'点了 \'+n+\' 次\'">点我计数</button>';
                 });
+                $grid->column('_sync_test_form', '同步内容弹窗')
+                ->display('同步弹窗（Form）')
+                ->modal('同步内容（非异步）', function ($modal) {
+                    });
             $grid->column('avgYearVist')->hide();
             $grid->column('incrs');
             $grid->column('date')->sortable();

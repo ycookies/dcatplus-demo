@@ -91,22 +91,17 @@ class ModalFormController extends Controller
     }
 
     /**
-     * 2. keepAlive 复用式：关闭归位、状态延续（元素身份保持）.
-     *
-     * 默认销毁式（其余示例）：关闭即销毁、页面零 DOM 残留、重复打开
-     * 每次都是初始状态。需要跨开关保留状态或依赖页面加载时脚本绑定的
-     * 内容（工具表单、图表等）才开启本项.
+     * 2. 销毁式行为演示：关闭即销毁、页面零 DOM 残留，重复打开每次都是初始状态.
      */
     protected function syncInteractive()
     {
         return Modal::make()
-            ->keepAlive()
-            ->title('同步内容 · keepAlive 复用式')
-            ->body("<p>本弹窗开启了 <code>keepAlive()</code>：反复【关闭再打开】计数不归零"
-                ."（同一 DOM 节点复用，关闭只是归位隐藏）：</p>"
+            ->title('同步内容 · 销毁式')
+            ->body("<p>关闭弹窗后内容随 layer 销毁，页面不残留任何弹窗 DOM；"
+                ."反复【关闭再打开】计数每次归零（全新节点）：</p>"
                 ."<button class='btn btn-primary btn-sm' onclick=\"var n=(this.dataset.n=(+this.dataset.n||0)+1);"
                 ."this.innerText='点了 '+n+' 次'\">点我计数</button>")
-            ->button("<span class='btn btn-outline-primary'>keepAlive 复用</span>")
+            ->button("<span class='btn btn-outline-primary'>销毁式演示</span>")
             ->render();
     }
 
@@ -143,19 +138,20 @@ class ModalFormController extends Controller
     }
 
     /**
-     * 6. 同步工具表单：Widgets\\Form 带 handle 的表单类内联渲染（TelegramMenuDelete 同款模式）.
+     * 6. 异步工具表单：Widgets\\Form + LazyRenderable（TelegramMenuDelete 同款模式）.
      *
      * 提交自动走 dcat-api/form 端点分发到 handle()（无需注册路由，_token
      * 自动携带）；成功后所在弹层自动关闭，再按 then 指令分发
      * （refresh 整页重载 / 无指令只提示）；失败弹窗保留供修改重试。
+     * 关闭即销毁，每次打开重新请求（数据始终新鲜）。
      */
     protected function syncWidgetForm()
     {
         return Modal::make()
-            ->keepAlive()
-            ->title('同步内容 · 工具表单（Widgets\Form + handle）')
-            ->body(SyncWidgetForm::make())
-            ->button("<span class='btn btn-outline-primary'>同步表单</span>")
+            ->lg()
+            ->title('异步工具表单（Widgets\Form + LazyRenderable）')
+            ->body(SyncWidgetForm::make()->payload(['name' => '演示用户']))
+            ->button("<span class='btn btn-outline-primary'>异步工具表单</span>")
             ->render();
     }
 

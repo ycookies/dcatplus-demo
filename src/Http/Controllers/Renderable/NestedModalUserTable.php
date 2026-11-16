@@ -41,11 +41,16 @@ class NestedModalUserTable extends LazyRenderable
     public function grid(): Grid
     {
         return Grid::make(new Administrator(), function (Grid $grid) {
-            // ★ 核心方案：显式资源路径 + 重新打开创建按钮
-            // （注意：resource() 是只读 getter，必须用 setResource）
+            $grid->model()->where([['id', '>', 1]])->orderByDesc('id');
+            // ★ 唯一必须手写的：显式资源路径（resource() 是只读 getter，
+            //   传参被静默丢弃，必须用 setResource）
             $grid->setResource('auth/users');
-            $grid->showCreateButton();
 
+            // 以下均为默认行为，无需手写：
+            // - 创建按钮 + 弹窗创建（showCreateButton + enableDialogCreate）
+            // - 快捷编辑/弹窗查看行操作（actions 自动适配）
+            // 弹窗查看的尺寸可按需配置（详情内容多时调大窗口）：
+            $grid->dialogViewSize('xl'); // 'sm'|'lg'|'xl' 或 ['800px','600px'] 或 '80%'
             $grid->column('id', 'ID')->sortable();
             $grid->column('username');
             $grid->column('name');

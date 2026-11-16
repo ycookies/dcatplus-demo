@@ -36,10 +36,29 @@ class GridController extends Controller
     {
         return new Grid(null, function (Grid $grid) {
             $grid->number();
+            //$grid->enableDialogCreate();
+
+            // 设置弹窗宽高，默认值为 '700px', '670px'
+            //$grid->setDialogFormDimensions('50%', '50%');
+            $grid->selector(function (Grid\Tools\Selector $selector) {
+                $selector->select('brand', '品牌', [
+                    1 => '华为',
+                    2 => '小米',
+                    3 => 'OPPO',
+                    4 => 'vivo',
+                ]);
+                $selector->select('yanse', '颜色', [
+                    1 => '<span style="display:inline-block;background-color:#FF0000;width:16px;height: 16px;"></span>',
+                    2 => '<span style="display:inline-block;background-color:#3054dd;width:16px;height: 16px;"></span>',
+                    3 => '<span style="display:inline-block;background-color:#ffb60f;width:16px;height: 16px;"></span>',
+                    4 => '<span style="display:inline-block;background-color:#30ff48;width:16px;height: 16px;"></span>',
+                ]);
+            });
             $grid->column('id')->code()->sortable();
             $grid->column('label')->explode()->label();
             $grid->column('progressBar')->progressBar()->sortable();
             //$grid->column('video','视频')->video();
+            $grid->column('label')->dot();
             $grid->column('expand')
                 ->display(Factory::create()->name)
                 ->expand(PostTable::make());
@@ -61,6 +80,25 @@ class GridController extends Controller
                 ->radio(['PHP', 'JAVA', 'GO', 'C'])
                 ->else()
                 ->display('<i>None</i>');
+
+            // 额外列（测试多列在 iframe-tab 模式下的表现）
+            $grid->column('status', '状态')->using([0 => '禁用', 1 => '启用'])->label([
+                0 => 'danger',
+                1 => 'success',
+            ]);
+            $grid->column('order', '排序')->editable();
+            $grid->column('price', '价格')->display(function ($v) { return '¥' . number_format($v, 2); });
+            $grid->column('stock', '库存')->progressBar('#5c6bc0');
+            $grid->column('category', '分类')->label(['default' => 'default', '电子' => 'primary', '服装' => 'info', '食品' => 'success', '家居' => 'warning']);
+            $grid->column('city', '城市');
+            $grid->column('email', '邮箱')->copyable();
+            $grid->column('phone', '电话')->copyable();
+            $grid->column('address', '地址')->limit(20);
+            $grid->column('weight', '重量(KG)')->display(function ($v) { return number_format($v, 1); });
+            $grid->column('color', '颜色')->dot(['#FF0000' => '红色', '#3054dd' => '蓝色', '#ffb60f' => '黄色', '#30ff48' => '绿色', '#999' => '灰色']);
+            $grid->column('source', '来源')->using(['web' => '网站', 'app' => 'APP', 'mini' => '小程序', 'h5' => 'H5']);
+            $grid->column('ip', 'IP地址');
+            $grid->column('remark', '备注')->limit(15);
 
             $grid->disableCreateButton();
             $grid->disableActions();
@@ -130,6 +168,9 @@ class GridController extends Controller
 
         $data = [];
 
+        $categories = ['电子', '服装', '食品', '家居', '默认'];
+        $cities = ['北京', '上海', '广州', '深圳', '杭州', '成都', '武汉', '南京', '重庆', '西安'];
+
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
                 'id' => $i+1,
@@ -140,7 +181,7 @@ class GridController extends Controller
                 'editable' => mt_rand(0, 14),
                 'checkbox' => value(function () use ($faker) {
                     $values = [];
-                    for ($i = 0; $i < mt_rand(1, 4); $i++) {
+                    for ($j = 0; $j < mt_rand(1, 4); $j++) {
                         $values[] = mt_rand(0, 3);
                     }
                     return join(',', $values);
@@ -149,6 +190,20 @@ class GridController extends Controller
                 'is_new' => mt_rand(0, 1),
                 'is_hot' => mt_rand(0, 1),
                 'published' => mt_rand(0, 1),
+                'status' => mt_rand(0, 1),
+                'order' => mt_rand(1, 100),
+                'price' => mt_rand(100, 99999) / 10,
+                'stock' => mt_rand(0, 500),
+                'category' => $categories[array_rand($categories)],
+                'city' => $cities[array_rand($cities)],
+                'email' => $faker->safeEmail,
+                'phone' => '1' . mt_rand(3, 9) . mt_rand(100000000, 999999999),
+                'address' => $faker->address,
+                'weight' => mt_rand(1, 5000) / 10,
+                'color' => ['#FF0000', '#3054dd', '#ffb60f', '#30ff48', '#999'][array_rand([0,1,2,3,4])],
+                'source' => ['web', 'app', 'mini', 'h5'][array_rand([0,1,2,3])],
+                'ip' => mt_rand(1, 255) . '.' . mt_rand(0, 255) . '.' . mt_rand(0, 255) . '.' . mt_rand(1, 254),
+                'remark' => $faker->sentence,
             ];
         }
 

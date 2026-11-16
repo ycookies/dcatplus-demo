@@ -29,7 +29,7 @@ class Report extends Repository
 
         $data = [];
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             $data[] = [
                 'id' => $i + 1,
                 'name' => $faker->name,

@@ -12,6 +12,7 @@ class UserTable extends LazyRenderable
     {
         return Grid::make(new Administrator(), function (Grid $grid) {
             $grid->column('id', 'ID')->sortable();
+            $grid->setResource('auth/users');
             $grid->column('username');
             $grid->column('name');
             $grid->column('created_at');

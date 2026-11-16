@@ -82,11 +82,14 @@ class FormController extends Controller
 
         $form->action(request()->fullUrl());
 
+        //$form->photo('photo2','图片2')->nametype('uniqid')->remove(true)->help('单图，不可删除');
+        //$form->ueditor('form2_content','百度编辑器');
+        //$form->ueditor('form3_content','百度编辑器');
         $form->text('form1.text', 'text')->required();
         $form->password('form1.password', 'password')->required();
         $form->email('form1.email', 'email');
         $form->mobile('form1.mobile', 'mobile');
-        $form->url('form1.url', 'url');
+        $form->url('form1.url', 'url')->append('123');
         $form->ip('form1.ip', 'ip');
 
         $form->color('form1.color', 'color');
@@ -226,7 +229,12 @@ class FormController extends Controller
             ->setTitleColumn('title')
             ->nodes($menuModel->allNodes());*/
 
-        $form->listbox('form2.listbox', 'listbox')->options($names);
+        $form->listbox('form2.listbox', 'listbox')
+            ->options($names)
+            ->settings([
+                'selectorMinimalHeight'=>500,
+                //'showFilterInputs' => false,
+            ]);
 
         $form->editor('form2.editor', 'editor');
         $form->markdown('form2.markdown', 'markdown');
@@ -255,17 +263,17 @@ class FormController extends Controller
 
         $form->divider();
         $form->table('column_name','表格形式', function ($table) {
-            $table->text('key')->prepend('');
-            $table->text('value')->prepend('');
+            $table->text('键名')->help('这是一个帮助提示');
+            $table->text('键值');
             $table->text('desc');
         });
         $form->table('column_name2','表格形式-select', function ($table) {
-            $table->text('key')->prepend('');
-            $table->select('value')->options(['1'=>'第一项','2'=>'第二项']);
-            $table->text('desc');
+            $table->text('键名')->columnWidth('100px');
+            $table->select('键值')->options(['1'=>'第一项','2'=>'第二项'])->default('1')->help('这是一个帮助提示');
+            $table->textarea('desc');
         });
         $form->table('column_name2','表格形式-icon', function ($table) {
-            $table->text('title')->prepend('');
+            $table->text('title');
             $table->text('desc');
             $table->iconimg('icon')->nametype('datetime')
             ->remove(true);

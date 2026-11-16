@@ -44,10 +44,17 @@ class FixedController extends Controller
 
             // 启用边框模式
 //            $grid->withBorder();
-
+            // $grid->setActionClass(Grid\Displayers\DropdownActions::class);
+            // $grid->setActionClass(Grid\Displayers\Actions::class);
             $grid->fixColumns(2);
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                // $actions->disableDelete(); //  禁用删除
+                // $actions->disableEdit();   //  禁用修改
+                // $actions->disableQuickEdit(); //禁用快速修改(弹窗形式)
+                // $actions->disableView(); //  禁用查看
+            });
 
-            $grid->disableActions();
+            //$grid->disableActions();
             $grid->disableBatchDelete();
             $grid->disableCreateButton();
             $grid->disableCreateButton();
