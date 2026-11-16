@@ -31,6 +31,7 @@ class BorderTableController extends Controller
             $grid->column('content')->limit(50);
             $grid->column('avgMonthCost')->display('异步表单')
                 ->modal('弹窗表单',function (Grid\Displayers\Modal $modal) {
+                //$modal->xl();
                 // 标题
                 $modal->title('异步表单');
                 // 自定义图标
@@ -47,6 +48,22 @@ class BorderTableController extends Controller
             $grid->column('_nested_test', '嵌套弹窗测试')
                 ->display('打开外层弹窗')
                 ->modal('用户列表（外层弹窗）', NestedModalUserTable::make());
+            // 同步内容弹窗：Closure 返回非 LazyRenderable（纯 HTML / 普通组件）
+            // → 不走异步加载，内容随页面渲染进隐藏容器，点击 layer 原生弹出。
+            // 高度自适应；弹窗内交互（按钮/组件脚本）页面加载时已绑定，直接可用
+            $grid->column('_sync_test', '同步内容弹窗')
+                ->display('同步弹窗')
+                ->modal('同步内容（非异步）', function ($modal) {
+                    $table = \Dcat\Admin\Widgets\Table::make(
+                        ['字段', '值'],
+                        [['名称', $this->name], ['日期', $this->date], ['来源', '页面同步渲染']]
+                    );
+
+                    return '<p style="color:#888">本弹窗内容随页面一次性渲染（非异步加载），'
+                        .'关闭后可反复打开，弹窗内交互直接可用：</p>'
+                        .$table->render()
+                        .'<button class="btn btn-primary btn-sm" onclick="var n=(this.dataset.n=(+this.dataset.n||0)+1);this.innerText=\'点了 \'+n+\' 次\'">点我计数</button>';
+                });
             $grid->column('avgYearVist')->hide();
             $grid->column('incrs');
             $grid->column('date')->sortable();
