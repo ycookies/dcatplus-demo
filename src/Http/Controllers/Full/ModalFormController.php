@@ -4,7 +4,13 @@ namespace Dcat\Admin\DcatplusDemo\Http\Controllers\Full;
 
 use App\Http\Controllers\Controller;
 use Dcat\Admin\Form;
+use Dcat\Admin\Widgets\Form as WidgetForm;
+use Dcat\Admin\Widgets\Modal;
+use Dcat\Admin\Widgets\Table;
 use Dcat\Admin\Layout\Content;
+use Dcat\Admin\DcatplusDemo\Http\Controllers\Forms\UserProfile;
+use Dcat\Admin\DcatplusDemo\Http\Controllers\Renderable\NestedModalUserTable;
+use Dcat\Admin\DcatplusDemo\Http\Controllers\Renderable\UserTable;
 
 class ModalFormController extends Controller
 {
@@ -14,32 +20,189 @@ class ModalFormController extends Controller
     {
         return $content
             ->header('Modal Form')
-            ->description('在 <b>Dcat Admin</b> 中只需要使用数行代码即可构建出一个<b>非iframe</b>表单弹窗。')
+            ->description('弹窗全场景示例：同步内容 / 异步内容 / Form::dialog 三种通道全覆盖（layer 驱动）')
             ->body($this->build());
     }
 
     protected function build()
     {
         Form::dialog('新增角色')
-            ->click('.create-form') // 绑定点击按钮
-            ->url('auth/roles/create') // 表单页面链接，此参数会被按钮中的 “data-url” 属性替换。。
-            ->width('700px') // 指定弹窗宽度，可填写百分比，默认 720px
-            ->height('650px') // 指定弹窗高度，可填写百分比，默认 690px
-            ->success('LA.reload()'); // 新增成功后刷新页面
+            ->click('.create-form')
+            ->url('auth/roles/create')
+            ->width('700px')
+            ->height('650px')
+            ->success('LA.reload()');
 
         Form::dialog('编辑角色')
             ->click('.edit-form')
-                ->success('Dcat.reload()'); // 编辑成功后刷新页面
+            ->success('Dcat.reload()');
 
-        // 当需要在同个“class”的按钮中绑定不同的链接时，把链接放到按钮的“data-url”属性中即可
         $editPage = admin_base_path('auth/roles/1/edit');
 
         return "
-<div style='padding:30px 0'>
-    {$this->buildPreviewButton()} <br/><br/>
-    <span class='btn btn-outline-primary create-form'> &nbsp;&nbsp;&nbsp;新增表单弹窗&nbsp;&nbsp;&nbsp; </span> &nbsp;&nbsp;
-    <span class='btn btn-primary edit-form' data-url='{$editPage}'> &nbsp;&nbsp;&nbsp;编辑表单弹窗&nbsp;&nbsp;&nbsp; </span>
+<div style='padding: 20px 0'>
+    {$this->buildPreviewButton()}
+
+    {$this->section('一、同步内容（非异步加载）', '
+        内容随页面一次性渲染进隐藏容器，点击后整体搬入弹层（元素身份不变，
+        弹窗内交互页面加载时已绑定）。高度默认自适应，关闭后可反复打开。
+    ')}
+    <div style='margin: 12px 0'>
+        {$this->syncPlainHtml()} {$this->syncInteractive()} {$this->syncWidgetFooter()} {$this->syncXl()} {$this->syncEvents()}
+    </div>
+
+    {$this->section('二、异步内容（LazyRenderable / LazyGrid）', '
+        点击时以 renderable URL 为内容源异步加载（_dialog_form_ 最小化渲染），
+        提交由 layer 底部按钮驱动，保存后按 JsonResponse 指令分发
+        （refresh/download/location/script…无指令只提示不刷新）。
+    ')}
+    <div style='margin: 12px 0'>
+        {$this->asyncForm()} {$this->asyncViewOnly()} {$this->asyncTable()} {$this->asyncNested()}
+    </div>
+
+    {$this->section('三、Form::dialog 通道（原生用法）', '
+        直接绑定按钮 class 弹窗加载整页表单；链接可写在按钮 data-url 属性中覆盖默认值。
+    ')}
+    <div style='margin: 12px 0'>
+        <span class='btn btn-outline-primary create-form'> &nbsp;&nbsp;新增表单弹窗&nbsp;&nbsp; </span> &nbsp;&nbsp;
+        <span class='btn btn-primary edit-form' data-url='{$editPage}'> &nbsp;&nbsp;编辑表单弹窗&nbsp;&nbsp; </span>
+    </div>
 </div>
 ";
+    }
+
+    protected function section(string $title, string $desc)
+    {
+        return "<h5 style='margin-top: 28px'><b>{$title}</b></h5>
+            <p style='color: #888; margin: 6px 0'>{$desc}</p>";
+    }
+
+    /**
+     * 1. 纯 HTML 同步内容：默认尺寸，高度自适应.
+     */
+    protected function syncPlainHtml()
+    {
+        return Modal::make()
+            ->title('纯 HTML 同步内容')
+            ->body('<h4>同步内容弹窗</h4><p>这段内容随页面渲染，没有发起任何异步请求。</p><p>高度随内容自适应（同 Bootstrap modal 行为）。</p>')
+            ->button("<span class='btn btn-outline-primary'>纯 HTML</span>")
+            ->render();
+    }
+
+    /**
+     * 2. 交互演示：弹窗内按钮状态跨开关延续（元素身份保持的硬证据）.
+     */
+    protected function syncInteractive()
+    {
+        return Modal::make()
+            ->title('同步内容 · 交互延续')
+            ->body("<p>反复【关闭再打开】弹窗，计数不会归零——内容是同一个 DOM 节点，"
+                ."只是搬入/搬出弹层：</p>"
+                ."<button class='btn btn-primary btn-sm' onclick=\"var n=(this.dataset.n=(+this.dataset.n||0)+1);"
+                ."this.innerText='点了 '+n+' 次'\">点我计数</button>")
+            ->button("<span class='btn btn-outline-primary'>交互延续</span>")
+            ->render();
+    }
+
+    /**
+     * 3. 组件内容 + footer：普通 Renderable（Widgets\\Table）同步渲染，带底部按钮区.
+     */
+    protected function syncWidgetFooter()
+    {
+        $table = Table::make(
+            ['字段', '值'],
+            [['类型', 'Widgets\\Table 组件'], ['渲染时机', '随页面同步渲染'], ['请求', '无']]
+        );
+
+        return Modal::make()
+            ->lg()
+            ->title('同步内容 · 组件 + footer')
+            ->body($table)
+            ->footer("<button class='btn btn-white' onclick=\"layer.closeAll()\">知道了</button>")
+            ->button("<span class='btn btn-outline-primary'>组件+footer</span>")
+            ->render();
+    }
+
+    /**
+     * 4. xl 大尺寸：显式档位时宽高用映射值（1140px / 90%）.
+     */
+    protected function syncXl()
+    {
+        return Modal::make()
+            ->xl()
+            ->title('同步内容 · xl 大尺寸')
+            ->body('<p style="padding: 40px 0; text-align: center; color: #999">xl 弹窗（1140px 宽 / 90% 高）——适合大段说明、对比表格等场景</p>')
+            ->button("<span class='btn btn-outline-primary'>xl 尺寸</span>")
+            ->render();
+    }
+
+    /**
+     * 5. 事件桥：onShow/onShown → 打开时机；onHide/onHidden → 关闭时机.
+     *    脚本内 target/body 指向内容根元素（与 BS4 时代语义兼容）.
+     */
+    protected function syncEvents()
+    {
+        return Modal::make()
+            ->title('同步内容 · 事件桥')
+            ->body('<p>打开/关闭本弹窗，观察右上角 toast 与控制台输出：</p><p style="color:#888">onShow → onShown →（关闭）→ onHide → onHidden</p>')
+            ->onShow("Dcat.info('onShow：开始显示')")
+            ->onShown("console.log('[事件桥] onShown', target)")
+            ->onHide("Dcat.warning('onHide：开始隐藏')")
+            ->onHidden("console.log('[事件桥] onHidden', target)")
+            ->button("<span class='btn btn-outline-primary'>事件桥</span>")
+            ->render();
+    }
+
+    /**
+     * 6. 异步表单：LazyRenderable 表单类（lg），payload 传上下文.
+     */
+    protected function asyncForm()
+    {
+        return Modal::make()
+            ->lg()
+            ->title('异步表单（LazyRenderable）')
+            ->body(UserProfile::make()->payload(['name' => '演示用户']))
+            ->button("<span class='btn btn-primary'>异步表单</span>")
+            ->render();
+    }
+
+    /**
+     * 7. 只读表单：viewOnly 隐藏提交/重置，纯查看.
+     */
+    protected function asyncViewOnly()
+    {
+        return Modal::make()
+            ->lg()
+            ->title('只读表单（viewOnly）')
+            ->viewOnly(true)
+            ->body(UserProfile::make()->payload(['name' => '只读演示']))
+            ->button("<span class='btn btn-primary'>只读表单</span>")
+            ->render();
+    }
+
+    /**
+     * 8. 异步表格：LazyGrid（Grid\LazyRenderable），分页/搜索弹窗内完成.
+     */
+    protected function asyncTable()
+    {
+        return Modal::make()
+            ->lg()
+            ->title('异步表格（LazyGrid）')
+            ->body(UserTable::make())
+            ->button("<span class='btn btn-primary'>异步表格</span>")
+            ->render();
+    }
+
+    /**
+     * 9. 嵌套弹窗：外层异步表格内，行操作再开内层弹窗（layer 天然多层叠加）.
+     */
+    protected function asyncNested()
+    {
+        return Modal::make()
+            ->xl()
+            ->title('嵌套弹窗（外层表格 → 内层表单）')
+            ->body(NestedModalUserTable::make())
+            ->button("<span class='btn btn-primary'>嵌套弹窗</span>")
+            ->render();
     }
 }
