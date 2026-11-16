@@ -8,6 +8,7 @@ use Dcat\Admin\Widgets\Form as WidgetForm;
 use Dcat\Admin\Widgets\Modal;
 use Dcat\Admin\Widgets\Table;
 use Dcat\Admin\Layout\Content;
+use Dcat\Admin\DcatplusDemo\Http\Controllers\Forms\SyncWidgetForm;
 use Dcat\Admin\DcatplusDemo\Http\Controllers\Forms\UserProfile;
 use Dcat\Admin\DcatplusDemo\Http\Controllers\Renderable\NestedModalUserTable;
 use Dcat\Admin\DcatplusDemo\Http\Controllers\Renderable\UserTable;
@@ -48,7 +49,7 @@ class ModalFormController extends Controller
         弹窗内交互页面加载时已绑定）。高度默认自适应，关闭后可反复打开。
     ')}
     <div style='margin: 12px 0'>
-        {$this->syncPlainHtml()} {$this->syncInteractive()} {$this->syncWidgetFooter()} {$this->syncXl()} {$this->syncEvents()}
+        {$this->syncPlainHtml()} {$this->syncInteractive()} {$this->syncWidgetFooter()} {$this->syncXl()} {$this->syncEvents()} {$this->syncWidgetForm()}
     </div>
 
     {$this->section('二、异步内容（LazyRenderable / LazyGrid）', '
@@ -133,6 +134,22 @@ class ModalFormController extends Controller
             ->title('同步内容 · xl 大尺寸')
             ->body('<p style="padding: 40px 0; text-align: center; color: #999">xl 弹窗（1140px 宽 / 90% 高）——适合大段说明、对比表格等场景</p>')
             ->button("<span class='btn btn-outline-primary'>xl 尺寸</span>")
+            ->render();
+    }
+
+    /**
+     * 6. 同步工具表单：Widgets\\Form 带 handle 的表单类内联渲染（TelegramMenuDelete 同款模式）.
+     *
+     * 提交自动走 dcat-api/form 端点分发到 handle()（无需注册路由，_token
+     * 自动携带）；成功后所在弹层自动关闭，再按 then 指令分发
+     * （refresh 整页重载 / 无指令只提示）；失败弹窗保留供修改重试。
+     */
+    protected function syncWidgetForm()
+    {
+        return Modal::make()
+            ->title('同步内容 · 工具表单（Widgets\Form + handle）')
+            ->body(SyncWidgetForm::make())
+            ->button("<span class='btn btn-outline-primary'>同步表单</span>")
             ->render();
     }
 
