@@ -49,6 +49,10 @@ Route::prefix('dcatplus-demo')
         Route::get('forms', 'Full\FormController@index');
         Route::get('forms/preview', 'Full\FormController@preview');
 
+        // 表单字段全目录
+        Route::get('form/fields', 'Full\FormFieldsController@index');
+        Route::get('form/fields/preview', 'Full\FormFieldsController@preview');
+
         Route::get('forms/append', 'Full\FormAppendController@index');
         Route::get('forms/append/preview', 'Full\FormAppendController@preview');
 
