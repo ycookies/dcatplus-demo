@@ -27,7 +27,7 @@ class MenuDeleteForm extends Form
 
         // 实际业务写在这里（如 TelegramServices::deleteMenu($input['menu_keyword'])）
         // 演示：无落库，直接成功（去掉 ->refresh() 则只提示不刷新）
-        return $this->success('已处理：'.$input['menu_keyword']);
+        return $this->success('已处理：'.$input['menu_keyword'])->refresh();
     }
 
     public function form()

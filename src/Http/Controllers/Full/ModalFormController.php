@@ -185,8 +185,8 @@ class ModalFormController extends Controller
      */
     protected function mWidgetForm()
     {
+        // 未指定尺寸 → 高度内容自适应；显式 sm/lg/xl → 恒定不变
         return Modal::make()
-            ->lg()
             ->title('同步内容 · 工具表单（Widgets\Form + handle）')
             ->body(MenuDeleteForm::make())
             ->button("<span class='btn btn-outline-primary'>工具表单</span>")
