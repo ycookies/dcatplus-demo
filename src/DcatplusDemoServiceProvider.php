@@ -96,6 +96,11 @@ class DcatplusDemoServiceProvider extends ServiceProvider {
             'uri'    => 'dcatplus-demo/forms',
         ],[
             'parent' => '数据表单',
+            'title'  => '表单字段全目录 <span class="right badge badge-primary">New</span>',
+            'icon'   => 'feather icon-list',
+            'uri'    => 'dcatplus-demo/form/fields',
+        ],[
+            'parent' => '数据表单',
             'title'  => '弹窗表单',
             'icon'   => 'feather icon-menu',
             'uri'    => 'dcatplus-demo/form/modal',
