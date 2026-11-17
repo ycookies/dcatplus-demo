@@ -176,20 +176,18 @@ class ModalFormController extends Controller
     }
 
     /**
-     * 工具表单（带 handle 的 Widgets\Form 类，TelegramMenuDelete 同款模式）
-     * —— 必须走异步通道：表单的提交脚本在响应内由 resolveHtml 重放绑定，
-     * 提交自动走 dcat-api/form 端点分发到 handle()（无需注册路由，_token
-     * 自动携带）；成功后所在弹层自动关闭并按 then 指令分发（refresh 整页
-     * 重载 / 无指令只提示）；失败弹窗保留供修改重试。
-     *
-     * ⚠ 不放同步通道：同步内容经 template clone，页面加载时绑定的提交
-     * 脚本不会随 clone 重绑（表单渲染但点了没反应）。
+     * 同步内容内嵌工具表单（TelegramMenuDelete 同款模式：普通
+     * Widgets\Form + handle，无需 LazyRenderable）：表单随页面渲染进
+     * 隐藏容器（提交脚本页面加载时即绑定）；提交自动走 dcat-api/form
+     * 端点分发到 handle()（无需注册路由，_token 自动携带）；成功后
+     * 所在弹层自动关闭并按 then 指令分发（refresh 整页重载 / 无指令
+     * 只提示）；失败弹窗保留供修改重试。
      */
     protected function mWidgetForm()
     {
         return Modal::make()
             ->lg()
-            ->title('工具表单（Widgets\Form + handle，异步通道）')
+            ->title('同步内容 · 工具表单（Widgets\Form + handle）')
             ->body(MenuDeleteForm::make())
             ->button("<span class='btn btn-outline-primary'>工具表单</span>")
             ->render();
