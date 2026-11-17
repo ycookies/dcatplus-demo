@@ -8,6 +8,7 @@ use Dcat\Admin\Widgets\Table;
 use Dcat\Admin\Widgets\Modal;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\DcatplusDemo\Http\Controllers\Forms\JsonResponseDemoForm;
+use Dcat\Admin\DcatplusDemo\Http\Controllers\Forms\MenuDeleteForm;
 use Dcat\Admin\DcatplusDemo\Http\Controllers\Forms\UserProfile;
 use Dcat\Admin\DcatplusDemo\Http\Controllers\Renderable\NestedModalUserTable;
 use Dcat\Admin\DcatplusDemo\Http\Controllers\Renderable\UserTable;
@@ -49,7 +50,7 @@ class ModalFormController extends Controller
         未指定尺寸=高度内容自适应；显式 sm/lg/xl/size=恒定不变。
     ')}
     <div style='margin: 12px 0'>
-        {$this->mPlain()} {$this->mSm()} {$this->mLg()} {$this->mXl()} {$this->mCustomSize()} {$this->mFooter()} {$this->mJoin()}
+        {$this->mPlain()} {$this->mSm()} {$this->mLg()} {$this->mXl()} {$this->mCustomSize()} {$this->mFooter()} {$this->mJoin()} {$this->mWidgetForm()}
     </div>
 
     {$this->section('二、Modal 事件与行为 API', '
@@ -172,6 +173,26 @@ class ModalFormController extends Controller
             ->button("<span class='btn btn-outline-primary'>join 拼接</span>");
 
         return $modal->render();
+    }
+
+    /**
+     * 工具表单（带 handle 的 Widgets\Form 类，TelegramMenuDelete 同款模式）
+     * —— 必须走异步通道：表单的提交脚本在响应内由 resolveHtml 重放绑定，
+     * 提交自动走 dcat-api/form 端点分发到 handle()（无需注册路由，_token
+     * 自动携带）；成功后所在弹层自动关闭并按 then 指令分发（refresh 整页
+     * 重载 / 无指令只提示）；失败弹窗保留供修改重试。
+     *
+     * ⚠ 不放同步通道：同步内容经 template clone，页面加载时绑定的提交
+     * 脚本不会随 clone 重绑（表单渲染但点了没反应）。
+     */
+    protected function mWidgetForm()
+    {
+        return Modal::make()
+            ->lg()
+            ->title('工具表单（Widgets\Form + handle，异步通道）')
+            ->body(MenuDeleteForm::make())
+            ->button("<span class='btn btn-outline-primary'>工具表单</span>")
+            ->render();
     }
 
     /* ------------------ 二、Modal 事件与行为 API ------------------ */
